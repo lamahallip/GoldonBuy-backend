@@ -20,12 +20,26 @@ public class Store {
     private String name;
     private String contactName;
 
+    @Enumerated(EnumType.STRING)
+    private TypeStore type;
+
+    @Enumerated(EnumType.STRING)
+    private SizeStore size = SizeStore.FREE;
+
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    @ManyToMany
-    private List<Address> addresses;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    public Store(String name, String contactName, TypeStore type, Address address) {
+        this.name = name;
+        this.contactName = contactName;
+        this.type = type;
+        this.address = address;
+    }
 }

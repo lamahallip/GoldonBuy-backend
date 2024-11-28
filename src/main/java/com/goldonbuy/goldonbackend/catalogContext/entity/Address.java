@@ -25,6 +25,6 @@ public class Address {
     private String zipCode;
     private String country;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "address")
     private List<Store> stores;
 }

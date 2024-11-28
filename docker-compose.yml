@@ -5,7 +5,7 @@ services:
     container_name: Mysql_container
     restart: unless-stopped                      # always unless-stopped
     environment:
-      #MYSQL_DATABASE: goldenbuy_db            # name of database
+      MYSQL_DATABASE: goldenbuy_db            # name of database
       #MYSQL_USER: lamahallip             # the name of user
       #MYSQL_PASSWORD: Leseulallip@1999-         # password for user
       MYSQL_ROOT_PASSWORD: Leseulallip@1999-     # password for user
