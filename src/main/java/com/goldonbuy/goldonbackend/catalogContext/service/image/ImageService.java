@@ -49,6 +49,9 @@ public class ImageService implements IImageService {
                         });
     }
 
+    /**
+     *  Method to save product images from Database
+     * ***/
     @Override
     public java.util.List<AddImageRequest> saveImagesProduct(java.util.List<MultipartFile> files, Long productId) {
 
@@ -66,10 +69,10 @@ public class ImageService implements IImageService {
 
                String buildDownloadUrl = "/api/v1/images/image/download/";
 
-               String downloadUrl = buildDownloadUrl+ image.getId();
+               String downloadUrl = buildDownloadUrl + image.getId();
                image.setDownloadUrl(downloadUrl);
                com.goldonbuy.goldonbackend.catalogContext.entity.Image savedImage = imageRepository.save(image);
-               savedImage.setDownloadUrl(buildDownloadUrl+savedImage.getId());
+               savedImage.setDownloadUrl(buildDownloadUrl + savedImage.getId());
                imageRepository.save(savedImage);
 
                AddImageRequest addImageRequest = new AddImageRequest();
@@ -86,6 +89,9 @@ public class ImageService implements IImageService {
         return savedAddImageRequests;
     }
 
+    /**
+     *  Method to save store images from Database
+     * ***/
     @Override
     public java.util.List<AddImageRequest> saveImageStore(java.util.List<MultipartFile> files, Long storeId) {
         Store store = this.storeService.getStoreById(storeId) ;
