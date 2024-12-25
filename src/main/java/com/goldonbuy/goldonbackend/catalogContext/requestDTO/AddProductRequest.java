@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class AddProductRequest {
     private String name;
     private String brand;
+    private Boolean genre;
     private String description;
     private BigDecimal price;
     private int inventory;

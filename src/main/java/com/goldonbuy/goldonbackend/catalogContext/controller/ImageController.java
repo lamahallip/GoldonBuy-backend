@@ -20,12 +20,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.prefix/images}")
+@RequestMapping("${api.prefix}/images")
 public class ImageController {
 
     private final IImageService imageService;
 
-    @PostMapping("/upload-images-product")
+    @PostMapping("/upload/product")
     public ResponseEntity<ApiResponse> saveImagesProduct(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
 
         try {
@@ -36,7 +36,7 @@ public class ImageController {
         }
     }
 
-    @PostMapping("/upload-images-store")
+    @PostMapping("/upload/store")
     public ResponseEntity<ApiResponse> saveImagesStore(@RequestParam List<MultipartFile> files, @RequestParam Long storeId) {
 
         try {
@@ -56,7 +56,7 @@ public class ImageController {
                 .body(resource);
     }
 
-    @PutMapping("/image/{imageId/update}")
+    @PutMapping("/image/{imageId}/update")
     public ResponseEntity<ApiResponse> updateImage(@RequestBody MultipartFile file, @PathVariable Long imageId) {
         try {
             Image oldImage = imageService.getImageById(imageId);

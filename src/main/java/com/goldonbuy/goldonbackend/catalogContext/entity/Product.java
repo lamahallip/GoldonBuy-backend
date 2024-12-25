@@ -1,7 +1,6 @@
 package com.goldonbuy.goldonbackend.catalogContext.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +20,7 @@ public class Product {
 
     private String name;
     private String brand;
+    private Boolean genre = true;
     private String description;
     private BigDecimal price;
     private int inventory;
@@ -36,7 +36,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
-    public Product(String name, String brand, String description, BigDecimal price, int inventory, Category category, Store store) {
+    public Product(String name, String brand, Boolean genre, String description, BigDecimal price, int inventory, Category category, Store store) {
         this.name = name;
         this.brand = brand;
         this.description = description;

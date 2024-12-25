@@ -21,7 +21,6 @@ public class CategoryController {
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllCategories() {
-
         try {
             List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.ok(new ApiResponse("Found !", categories));
@@ -30,12 +29,10 @@ public class CategoryController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error : ", HttpStatus.INTERNAL_SERVER_ERROR));
         }
-
     }
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category name) {
-
         try {
             Category theCategory = categoryService.addCategory(name);
             return ResponseEntity.ok(new ApiResponse("Success", theCategory));

@@ -6,7 +6,7 @@ import com.goldonbuy.goldonbackend.catalogContext.requestDTO.UpdateProductReques
 
 import java.util.List;
 
-public interface IProductServcie {
+public interface IProductService {
 
 
     Product addProduct(AddProductRequest request);

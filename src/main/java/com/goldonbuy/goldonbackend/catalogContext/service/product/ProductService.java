@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements IProductServcie {
+public class ProductService implements IProductService {
 
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
@@ -48,6 +48,7 @@ public class ProductService implements IProductServcie {
         return new Product(
                 request.getName(),
                 request.getBrand(),
+                request.getGenre(),
                 request.getDescription(),
                 request.getPrice(),
                 request.getInventory(),
@@ -74,7 +75,6 @@ public class ProductService implements IProductServcie {
         this.productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete,
                         () -> { throw new ProductNotFoundException("This product not found");});
-
     }
 
     /**
