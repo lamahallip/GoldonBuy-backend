@@ -11,6 +11,7 @@ public interface IStoreService {
     Store addStore(AddStoreRequest request);
     void deleteStoreById(Long id);
     Store updateStore(UpdateStoreRequest request, Long storeId);
+    List<Store> getAllStore();
     List<Store> getStoreByName(String name);
     List<Store> getStoreByContactName(String contactName);
     List<Store> getStoreByNameAndContactName(String name, String contactName);

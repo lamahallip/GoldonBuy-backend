@@ -38,7 +38,6 @@ public class StoreService implements IStoreService {
                     return this.addressRepository.save(address1);
                 });
         request.setAddress(address);
-
         return this.storeRepository.save(createStore(request, address));
 
     }
@@ -73,6 +72,11 @@ public class StoreService implements IStoreService {
         existingStore.setType(request.getType());
 
         return existingStore;
+    }
+
+    @Override
+    public List<Store> getAllStore() {
+        return storeRepository.findAll();
     }
 
     @Override
