@@ -1,10 +1,9 @@
-package com.goldonbuy.goldonbackend.catalogContext.requestDTO;
+package com.goldonbuy.goldonbackend.catalogContext.request;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data
-public class UpdateAddressRequest {
+public class AddAddressRequest {
     private String street;
     private String city;
     private String zipCode;

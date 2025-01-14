@@ -1,16 +1,23 @@
 package com.goldonbuy.goldonbackend.catalogContext.service.product;
 
+import com.goldonbuy.goldonbackend.catalogContext.dto.ImageDTO;
+import com.goldonbuy.goldonbackend.catalogContext.dto.ProductDTO;
+import com.goldonbuy.goldonbackend.catalogContext.dto.StoreDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Category;
+import com.goldonbuy.goldonbackend.catalogContext.entity.Image;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Product;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ProductNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.StoreNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.CategoryRepository;
+import com.goldonbuy.goldonbackend.catalogContext.repository.ImageRepository;
 import com.goldonbuy.goldonbackend.catalogContext.repository.ProductRepository;
 import com.goldonbuy.goldonbackend.catalogContext.repository.StoreRepository;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddProductRequest;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.UpdateProductRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddProductRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.UpdateProductRequest;
+import com.goldonbuy.goldonbackend.catalogContext.service.store.IStoreService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +27,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-    private ProductRepository productRepository;
-    private CategoryRepository categoryRepository;
-    private StoreRepository storeRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final StoreRepository storeRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
+    private final IStoreService storeService;
 
     /**
      *  Method to add new product in Database
@@ -147,5 +157,23 @@ public class ProductService implements IProductService {
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
         return this.productRepository.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public List<ProductDTO> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDTO).toList();
+    }
+
+    @Override
+    public ProductDTO convertToDTO(Product product) {
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDTO> imageDTOs = images.stream()
+                .map(image -> modelMapper.map(image, ImageDTO.class))
+                .toList();
+        StoreDTO storeDTO = storeService.convertToDTO(product.getStore());
+        productDTO.setImages(imageDTOs);
+        productDTO.setStore(storeDTO);
+        return productDTO;
     }
 }

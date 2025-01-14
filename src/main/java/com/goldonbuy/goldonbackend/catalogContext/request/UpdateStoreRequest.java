@@ -1,4 +1,4 @@
-package com.goldonbuy.goldonbackend.catalogContext.requestDTO;
+package com.goldonbuy.goldonbackend.catalogContext.request;
 
 import com.goldonbuy.goldonbackend.catalogContext.entity.Address;
 import com.goldonbuy.goldonbackend.catalogContext.entity.TypeStore;
@@ -8,6 +8,5 @@ import lombok.Data;
 public class UpdateStoreRequest {
     private String name;
     private String contactName;
-    private TypeStore type;
     private Address address;
 }

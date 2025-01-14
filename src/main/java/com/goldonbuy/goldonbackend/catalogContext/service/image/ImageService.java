@@ -2,9 +2,9 @@ package com.goldonbuy.goldonbackend.catalogContext.service.image;
 
 import com.goldonbuy.goldonbackend.catalogContext.entity.Product;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.RessourceNotFoundException;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.ImageRepository;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddImageRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddImageRequest;
 import com.goldonbuy.goldonbackend.catalogContext.service.product.ProductService;
 import com.goldonbuy.goldonbackend.catalogContext.service.store.StoreService;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Image;
@@ -34,7 +34,7 @@ public class ImageService implements IImageService {
     @Override
     public com.goldonbuy.goldonbackend.catalogContext.entity.Image getImageById(Long id) {
         return this.imageRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundException("No image found with id "+ id));
+                .orElseThrow(() -> new ResourceNotFoundException("No image found with id "+ id));
     }
 
     /**
@@ -45,7 +45,7 @@ public class ImageService implements IImageService {
         this.imageRepository.findById(id)
                 .ifPresentOrElse(imageRepository::delete,
                         () -> {
-                            throw new RessourceNotFoundException("No image found with id " + id);
+                            throw new ResourceNotFoundException("No image found with id " + id);
                         });
     }
 

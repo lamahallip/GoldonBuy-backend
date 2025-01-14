@@ -1,13 +1,18 @@
 package com.goldonbuy.goldonbackend.catalogContext.service.store;
 
+import com.goldonbuy.goldonbackend.catalogContext.dto.ImageDTO;
+import com.goldonbuy.goldonbackend.catalogContext.dto.StoreDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Address;
+import com.goldonbuy.goldonbackend.catalogContext.entity.Image;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.RessourceNotFoundException;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.AddressRepository;
+import com.goldonbuy.goldonbackend.catalogContext.repository.ImageRepository;
 import com.goldonbuy.goldonbackend.catalogContext.repository.StoreRepository;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddStoreRequest;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.UpdateStoreRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddStoreRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.UpdateStoreRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,16 +24,18 @@ public class StoreService implements IStoreService {
 
     private final StoreRepository storeRepository;
     private final AddressRepository addressRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
     @Override
     public Store getStoreById(Long id) {
         return this.storeRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundException("This store not found !"));
+                .orElseThrow(() -> new ResourceNotFoundException("This store not found !"));
     }
 
     @Override
     public Store addStore(AddStoreRequest request) {
-        Address address = Optional.ofNullable(this.addressRepository.findByCity(request.getAddress().getCity()))
+        Address address = Optional.ofNullable(this.addressRepository.findByStreet(request.getAddress().getStreet()))
                 .orElseGet(() -> {
                     Address address1 = new Address();
                     address1.setCity(request.getAddress().getCity());
@@ -45,7 +52,6 @@ public class StoreService implements IStoreService {
         return new Store(
                 request.getName(),
                 request.getContactName(),
-                request.getType(),
                 address
         );
     }
@@ -54,7 +60,7 @@ public class StoreService implements IStoreService {
     public void deleteStoreById(Long id) {
         this.storeRepository.findById(id)
                 .ifPresentOrElse(storeRepository::delete, () -> {
-                    throw new RessourceNotFoundException("This store not found !");
+                    throw new ResourceNotFoundException("This store not found !");
                 });
     }
 
@@ -63,13 +69,12 @@ public class StoreService implements IStoreService {
         return storeRepository.findById(storeId)
                 .map(existingStore -> updateExistingStore(existingStore, request))
                 .map(storeRepository::save)
-                .orElseThrow(() -> new RessourceNotFoundException("This store not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("This store not found"));
     }
     private Store updateExistingStore(Store existingStore, UpdateStoreRequest request){
         existingStore.setName(request.getName());
         existingStore.setContactName(request.getContactName());
         existingStore.setAddress(request.getAddress());
-        existingStore.setType(request.getType());
 
         return existingStore;
     }
@@ -132,6 +137,22 @@ public class StoreService implements IStoreService {
     @Override
     public Long countStoreByNameAndContactName(String name, String contactName) {
         return this.storeRepository.countByNameAndContactName(name, contactName);
+    }
+
+    @Override
+    public StoreDTO convertToDTO(Store store) {
+        StoreDTO storeDTO = modelMapper.map(store, StoreDTO.class);
+        List<Image> images = imageRepository.findByStoreId(store.getId());
+        List<ImageDTO> imageDTOs = images.stream()
+                .map(image -> modelMapper.map(image, ImageDTO.class))
+                .toList();
+        storeDTO.setImages(imageDTOs);
+        return storeDTO;
+    }
+
+    @Override
+    public List<StoreDTO> getConvertedStores(List<Store> stores) {
+        return stores.stream().map(this::convertToDTO).toList();
     }
 
 

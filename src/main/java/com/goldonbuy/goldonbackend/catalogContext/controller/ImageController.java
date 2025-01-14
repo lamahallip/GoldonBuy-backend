@@ -1,8 +1,8 @@
 package com.goldonbuy.goldonbackend.catalogContext.controller;
 
 import com.goldonbuy.goldonbackend.catalogContext.entity.Image;
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.RessourceNotFoundException;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddImageRequest;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddImageRequest;
 import com.goldonbuy.goldonbackend.catalogContext.response.ApiResponse;
 import com.goldonbuy.goldonbackend.catalogContext.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class ImageController {
                 imageService.updateImage(file, imageId);
                 return ResponseEntity.ok(new ApiResponse("Update success", null));
             }
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed", HttpStatus.INTERNAL_SERVER_ERROR));
@@ -78,7 +78,7 @@ public class ImageController {
                 imageService.deleteImageById(imageId);
                 return ResponseEntity.ok(new ApiResponse("delete success", null));
             }
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
         return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed", HttpStatus.INTERNAL_SERVER_ERROR));

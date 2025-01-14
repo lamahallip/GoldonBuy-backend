@@ -1,8 +1,9 @@
 package com.goldonbuy.goldonbackend.catalogContext.service.store;
 
+import com.goldonbuy.goldonbackend.catalogContext.dto.StoreDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddStoreRequest;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.UpdateStoreRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddStoreRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.UpdateStoreRequest;
 
 import java.util.List;
 
@@ -25,4 +26,7 @@ public interface IStoreService {
     Long countStoreByNameAndContactName(String name, String contactName);
 
 
+    StoreDTO convertToDTO(Store store);
+
+    List<StoreDTO> getConvertedStores(List<Store> stores);
 }

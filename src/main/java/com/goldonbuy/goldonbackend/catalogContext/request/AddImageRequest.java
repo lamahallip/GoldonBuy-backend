@@ -1,4 +1,4 @@
-package com.goldonbuy.goldonbackend.catalogContext.requestDTO;
+package com.goldonbuy.goldonbackend.catalogContext.request;
 
 import lombok.Data;
 

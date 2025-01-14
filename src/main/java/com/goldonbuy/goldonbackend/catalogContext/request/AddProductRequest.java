@@ -1,4 +1,4 @@
-package com.goldonbuy.goldonbackend.catalogContext.requestDTO;
+package com.goldonbuy.goldonbackend.catalogContext.request;
 
 import com.goldonbuy.goldonbackend.catalogContext.entity.Category;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;

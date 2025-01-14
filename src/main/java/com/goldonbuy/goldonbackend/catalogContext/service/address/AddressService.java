@@ -1,11 +1,14 @@
 package com.goldonbuy.goldonbackend.catalogContext.service.address;
 
+import com.goldonbuy.goldonbackend.catalogContext.dto.AddressDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Address;
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.RessourceNotFoundException;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.AddressRepository;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddAddressRequest;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.UpdateAddressRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddAddressRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.UpdateAddressRequest;
+import com.goldonbuy.goldonbackend.catalogContext.service.store.IStoreService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class AddressService implements IAddressService {
 
     private final AddressRepository addressRepository;
+    private final ModelMapper modelMapper;
+    private final IStoreService storeService;
 
     @Override
     public Address addAddress(AddAddressRequest request) {
@@ -33,7 +38,7 @@ public class AddressService implements IAddressService {
         return this.addressRepository.findById(addressId)
                 .map(existingAddress -> updateExistingAddress(existingAddress, request))
                 .map(addressRepository::save)
-                .orElseThrow(() -> new RessourceNotFoundException("This address not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("This address not found"));
     }
     private Address updateExistingAddress(Address existingAddress, UpdateAddressRequest request) {
         existingAddress.setCity(request.getCity());
@@ -42,6 +47,14 @@ public class AddressService implements IAddressService {
         existingAddress.setZipCode(request.getZipCode());
 
         return existingAddress;
+    }
+
+    @Override
+    public AddressDTO convertToDTO(Address address) {
+        AddressDTO addressDTO = modelMapper.map(address, AddressDTO.class);
+        //List<StoreDTO> storeDTOs = storeService.getConvertedStores(address.getStores());
+        //addressDTO.setStores(storeDTOs);
+        return addressDTO;
     }
 
 }

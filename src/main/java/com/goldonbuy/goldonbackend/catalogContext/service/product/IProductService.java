@@ -1,8 +1,9 @@
 package com.goldonbuy.goldonbackend.catalogContext.service.product;
 
+import com.goldonbuy.goldonbackend.catalogContext.dto.ProductDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Product;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.AddProductRequest;
-import com.goldonbuy.goldonbackend.catalogContext.requestDTO.UpdateProductRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.AddProductRequest;
+import com.goldonbuy.goldonbackend.catalogContext.request.UpdateProductRequest;
 
 import java.util.List;
 
@@ -22,7 +23,8 @@ public interface IProductService {
     List<Product> getProductsByBrancAndName(String brand, String name);
     List<Product> getProductsByStore(String store);
 
-
     Long countProductsByBrandAndName(String brand, String name);
 
+    List<ProductDTO> getConvertedProducts(List<Product> products);
+    ProductDTO convertToDTO(Product product);
 }

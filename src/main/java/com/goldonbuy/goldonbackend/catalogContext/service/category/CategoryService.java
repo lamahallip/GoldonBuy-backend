@@ -2,7 +2,7 @@ package com.goldonbuy.goldonbackend.catalogContext.service.category;
 
 import com.goldonbuy.goldonbackend.catalogContext.entity.Category;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.AlreadyExistingException;
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.RessourceNotFoundException;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public Category getCategoryById(Long id) {
         return this.categoryRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     @Override
@@ -46,14 +46,14 @@ public class CategoryService implements ICategoryService {
                     oldCategory.setName(category.getName());
                     return this.categoryRepository.save(oldCategory);
                 }
-        ).orElseThrow(() -> new RessourceNotFoundException("Category not found"));
+        ).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     @Override
     public void deleteCategory(Long id) {
         this.categoryRepository.findById(id).
                 ifPresentOrElse(categoryRepository::delete, () -> {
-                    throw new RessourceNotFoundException("Category not found !");
+                    throw new ResourceNotFoundException("Category not found !");
                 });
     }
 }

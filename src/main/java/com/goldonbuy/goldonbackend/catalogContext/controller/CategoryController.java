@@ -2,7 +2,7 @@ package com.goldonbuy.goldonbackend.catalogContext.controller;
 
 import com.goldonbuy.goldonbackend.catalogContext.entity.Category;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.AlreadyExistingException;
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.RessourceNotFoundException;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.response.ApiResponse;
 import com.goldonbuy.goldonbackend.catalogContext.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
@@ -48,37 +48,37 @@ public class CategoryController {
         try {
             Category category = categoryService.getCategoryById(id);
             return ResponseEntity.ok(new ApiResponse("Found !", category));
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @GetMapping("/category/{name}/category")
+    @GetMapping("/{name}/category")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         try {
             Category category = categoryService.getCategoryByName(name);
             return ResponseEntity.ok(new ApiResponse("Found!", category));
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @GetMapping("/category/{id}/delete")
+    @DeleteMapping("/category/{id}/delete")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
             return ResponseEntity.ok(new ApiResponse("Delete success", null));
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
-    @GetMapping("/category/{id}/update")
+    @PutMapping("/category/{id}/update")
     public ResponseEntity<ApiResponse> updateCategory(@RequestBody Category category, @PathVariable Long id) {
         try {
             Category updateCategory = categoryService.updateCategory(category, id);
             return ResponseEntity.ok(new ApiResponse("Update success", updateCategory));
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
