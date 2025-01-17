@@ -33,10 +33,13 @@ public class CartItemService implements ICartItemService {
         if(cartItem.getId() == null) {
             cartItem.setCart(cart);
             cartItem.setProduct(product);
+            //cartItem.setUnitPrice(product.getPrice());
             cartItem.setQuantity(quantity);
-        } else {
+        }
+        else {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
+
         cartItem.setTotalPrice();
         cart.addItem(cartItem);
         cartRepository.save(cart);
@@ -65,7 +68,11 @@ public class CartItemService implements ICartItemService {
                             item.setTotalPrice();
                         }
                 );
-        BigDecimal totalAmount = cart.getTotalAmount();
+        BigDecimal totalAmount = cart.getItems()
+                .stream()
+                .map(CartItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         cart.setTotalAmount(totalAmount);
         cartRepository.save(cart);
     }

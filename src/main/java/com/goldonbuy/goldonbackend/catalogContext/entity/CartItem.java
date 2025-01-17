@@ -1,5 +1,6 @@
 package com.goldonbuy.goldonbackend.catalogContext.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,11 +27,13 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "cart_id", unique = true)
     private Cart cart;
 
     public void setTotalPrice() {
+        this.unitPrice = this.getProduct().getPrice();
         this.totalPrice = this.unitPrice.multiply(new BigDecimal(this.quantity));
     }
 }
