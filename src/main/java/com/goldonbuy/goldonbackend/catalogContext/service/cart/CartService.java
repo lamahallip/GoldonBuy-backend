@@ -45,10 +45,16 @@ public class CartService implements ICartService {
 
     @Override
     public Long initializeNewCart() {
+        Long newCartId = this.cartIdGenerator.get();
+        if(getCartId(newCartId)){
+            return newCartId;
+        }
         Cart newCart = new Cart();
-        Long newCartId = this.cartIdGenerator.incrementAndGet();
         newCart.setId(newCartId);
         return cartRepository.save(newCart).getId();
+    }
+    Boolean getCartId(Long id) {
+        return this.cartRepository.existsById(id);
     }
 
     @Override

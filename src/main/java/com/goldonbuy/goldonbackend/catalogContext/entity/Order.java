@@ -1,5 +1,6 @@
 package com.goldonbuy.goldonbackend.catalogContext.entity;
 
+import com.goldonbuy.goldonbackend.userContext.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

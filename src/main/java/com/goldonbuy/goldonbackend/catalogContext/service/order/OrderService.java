@@ -1,11 +1,13 @@
 package com.goldonbuy.goldonbackend.catalogContext.service.order;
 
+import com.goldonbuy.goldonbackend.catalogContext.dto.OrderDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.*;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.OrderRepository;
 import com.goldonbuy.goldonbackend.catalogContext.repository.ProductRepository;
 import com.goldonbuy.goldonbackend.catalogContext.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,6 +22,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ICartService cartService;
+    private final ModelMapper modelMapper;
 
     @Override
     public Order placeOrder(Long userId) {
@@ -67,15 +70,21 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order getOrder(Long orderId) {
+    public OrderDTO getOrder(Long orderId) {
         return this.orderRepository.findById(orderId)
+                .map(this::convertToDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found !"));
     }
 
     @Override
-    public List<Order> getUserOrders(Long userId) {
-        return orderRepository.findByUserId(userId);
+    public List<OrderDTO> getUserOrders(Long userId) {
+        List<Order> orders = this.orderRepository.findByUserId(userId);
+        return orders.stream().map(this::convertToDTO).toList();
     }
 
+    @Override
+    public OrderDTO convertToDTO(Order order) {
+        return this.modelMapper.map(order, OrderDTO.class);
+    }
 
 }

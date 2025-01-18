@@ -11,6 +11,7 @@ import com.goldonbuy.goldonbackend.catalogContext.repository.ImageRepository;
 import com.goldonbuy.goldonbackend.catalogContext.repository.StoreRepository;
 import com.goldonbuy.goldonbackend.catalogContext.request.AddStoreRequest;
 import com.goldonbuy.goldonbackend.catalogContext.request.UpdateStoreRequest;
+import com.goldonbuy.goldonbackend.catalogContext.service.address.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -74,7 +75,9 @@ public class StoreService implements IStoreService {
     private Store updateExistingStore(Store existingStore, UpdateStoreRequest request){
         existingStore.setName(request.getName());
         existingStore.setContactName(request.getContactName());
-        existingStore.setAddress(request.getAddress());
+        Address address = this.addressRepository.findById(request.getAddress().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found !"));
+        existingStore.setAddress(address);
 
         return existingStore;
     }

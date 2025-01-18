@@ -42,8 +42,9 @@ public class CartItemService implements ICartItemService {
 
         cartItem.setTotalPrice();
         cart.addItem(cartItem);
-        cartRepository.save(cart);
         cartItemRepository.save(cartItem);
+        cartRepository.save(cart);
+
     }
 
     @Override

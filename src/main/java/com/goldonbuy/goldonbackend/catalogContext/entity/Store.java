@@ -1,6 +1,7 @@
 package com.goldonbuy.goldonbackend.catalogContext.entity;
 
 import com.fasterxml.jackson.annotation.*;
+import com.goldonbuy.goldonbackend.userContext.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,15 +34,18 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
-    //@OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Product> products;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     @JsonBackReference
     private Address address;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Store(String name, String contactName, Address address) {
         this.name = name;
