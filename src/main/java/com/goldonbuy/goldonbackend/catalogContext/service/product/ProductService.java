@@ -7,6 +7,7 @@ import com.goldonbuy.goldonbackend.catalogContext.entity.Category;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Image;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Product;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.AlreadyExistingException;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ProductNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.StoreNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.CategoryRepository;
@@ -40,6 +41,10 @@ public class ProductService implements IProductService {
     @Override
     public Product addProduct(AddProductRequest request) {
 
+        if(productExist(request.getBrand(), request.getName())) {
+            throw new AlreadyExistingException(request.getBrand()+" "+request.getName()+" already exists ! You may update this product instead !");
+        }
+
         Category category = Optional.ofNullable(this.categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category();
@@ -54,6 +59,10 @@ public class ProductService implements IProductService {
 
         return this.productRepository.save(createProduct(request, category, store));
     }
+    private Boolean productExist(String brand, String name) {
+        return this.productRepository.existsByBrandAndName(brand, name);
+    }
+
     private Product createProduct(AddProductRequest request, Category category, Store store) {
         return new Product(
                 request.getName(),

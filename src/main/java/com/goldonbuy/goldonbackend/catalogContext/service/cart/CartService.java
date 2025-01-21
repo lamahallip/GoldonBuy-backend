@@ -4,11 +4,13 @@ import com.goldonbuy.goldonbackend.catalogContext.entity.Cart;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.repository.CartItemRepository;
 import com.goldonbuy.goldonbackend.catalogContext.repository.CartRepository;
+import com.goldonbuy.goldonbackend.userContext.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -44,18 +46,17 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart() {
-        Long newCartId = this.cartIdGenerator.get();
-        if(getCartId(newCartId)){
-            return newCartId;
-        }
-        Cart newCart = new Cart();
-        newCart.setId(newCartId);
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return this.cartRepository.save(cart);
+                });
     }
-    Boolean getCartId(Long id) {
-        return this.cartRepository.existsById(id);
-    }
+//    Boolean getCartId(Long id) {
+//        return this.cartRepository.existsById(id);
+//    }
 
     @Override
     public Cart getCartByUserId(Long userId) {

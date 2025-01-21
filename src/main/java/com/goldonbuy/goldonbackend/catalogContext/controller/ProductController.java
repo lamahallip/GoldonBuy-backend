@@ -2,6 +2,7 @@ package com.goldonbuy.goldonbackend.catalogContext.controller;
 
 import com.goldonbuy.goldonbackend.catalogContext.dto.ProductDTO;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Product;
+import com.goldonbuy.goldonbackend.catalogContext.exceptions.AlreadyExistingException;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.request.AddProductRequest;
 import com.goldonbuy.goldonbackend.catalogContext.request.UpdateProductRequest;
@@ -49,6 +50,8 @@ public class ProductController {
             Product theProduct = productService.addProduct(product);
             ProductDTO productDTO = productService.convertToDTO(theProduct);
             return ResponseEntity.ok(new ApiResponse("Add product success !", productDTO));
+        } catch (AlreadyExistingException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }

@@ -20,7 +20,7 @@ public class OrderController {
     private final IOrderService orderService;
 
     @PostMapping("/order")
-    public ResponseEntity<ApiResponse> createOrder(@RequestBody Long userId) {
+    public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
         try {
             Order order = this.orderService.placeOrder(userId);
             OrderDTO orderDTO = this.orderService.convertToDTO(order);
