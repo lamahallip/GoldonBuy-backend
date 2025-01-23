@@ -39,4 +39,5 @@ auth:
 
 api:
   prefix: /api/v1
+  prefix-2: /api/v2
 

@@ -3,7 +3,9 @@ package com.goldonbuy.goldonbackend.userContext.service;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.AlreadyExistingException;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.userContext.dto.UserDTO;
+import com.goldonbuy.goldonbackend.userContext.entity.Role;
 import com.goldonbuy.goldonbackend.userContext.entity.User;
+import com.goldonbuy.goldonbackend.userContext.repository.RoleRepository;
 import com.goldonbuy.goldonbackend.userContext.repository.UserRepository;
 import com.goldonbuy.goldonbackend.userContext.request.AddUserRequest;
 import com.goldonbuy.goldonbackend.userContext.request.UpdateUserRequest;
@@ -15,12 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -32,12 +36,16 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(AddUserRequest request) {
+
+        Role userRole = this.roleRepository.findByName("ROLE_USER");
+
         return Optional.of(request)
                 .filter(user -> !userRepository.existsByEmail(request.getEmail()))
                 .map(req -> {
                     User user = new User();
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
+                    user.setRoles(Set.of(userRole));
                     user.setEmail(request.getEmail());
                     user.setPassword(this.passwordEncoder.encode(request.getPassword()));
                     return userRepository.save(user);

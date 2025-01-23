@@ -10,6 +10,7 @@ import com.goldonbuy.goldonbackend.catalogContext.service.address.IAddressServic
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class AddressController {
 
     private final IAddressService addressService;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addAddress(@RequestBody AddAddressRequest request) {
         try {

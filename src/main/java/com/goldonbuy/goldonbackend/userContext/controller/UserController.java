@@ -1,16 +1,15 @@
 package com.goldonbuy.goldonbackend.userContext.controller;
 
-import com.goldonbuy.goldonbackend.catalogContext.exceptions.AlreadyExistingException;
 import com.goldonbuy.goldonbackend.catalogContext.exceptions.ResourceNotFoundException;
 import com.goldonbuy.goldonbackend.catalogContext.response.ApiResponse;
 import com.goldonbuy.goldonbackend.userContext.dto.UserDTO;
 import com.goldonbuy.goldonbackend.userContext.entity.User;
-import com.goldonbuy.goldonbackend.userContext.request.AddUserRequest;
 import com.goldonbuy.goldonbackend.userContext.request.UpdateUserRequest;
 import com.goldonbuy.goldonbackend.userContext.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -20,6 +19,22 @@ public class UserController {
 
     private final IUserService userService;
 
+//////////////////////////////////////////////////////////////// For test
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<String> helloAdmin() {
+        return ResponseEntity.ok("Hello admin");
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/user")
+    public ResponseEntity<String> helloUser() {
+        return ResponseEntity.ok("Hello user");
+    }
+
+//////////////////////////////////////////////////////////////////////////
+
     @GetMapping("/{userId}/user")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         try {
@@ -28,17 +43,6 @@ public class UserController {
             return ResponseEntity.ok(new ApiResponse("Success !", userDTO));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        }
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> createUser(@RequestBody AddUserRequest request) {
-        try {
-            User user = this.userService.createUser(request);
-            UserDTO userDTO = this.userService.convertToDTO(user);
-            return ResponseEntity.ok(new ApiResponse("Create User success !", userDTO));
-        } catch (AlreadyExistingException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

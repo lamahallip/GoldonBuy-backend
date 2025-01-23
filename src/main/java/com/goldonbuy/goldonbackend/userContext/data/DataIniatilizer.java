@@ -25,13 +25,13 @@ public class DataIniatilizer implements ApplicationListener<ApplicationReadyEven
     private final IRoleService roleService;
 
 
-
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Set<String> defaultRoles = Set.of("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER");
         createDefaultUserIfNotExists();
-        createDefaultRoleIfNotExists(defaultRoles);
         createDefaultAdminIfNotExists();
+        createDefaultRoleIfNotExists(defaultRoles);
+
     }
 
     private void createDefaultUserIfNotExists() {
@@ -64,7 +64,7 @@ public class DataIniatilizer implements ApplicationListener<ApplicationReadyEven
                 continue;
             }
             User user = new User();
-            user.setFirstName("The Admin");
+            user.setFirstName("Admin");
             user.setLastName("Admin " + i);
             user.setEmail(defaultEmail);
             user.setPassword(this.passwordEncoder.encode("000"+i));

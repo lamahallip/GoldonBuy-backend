@@ -11,6 +11,7 @@ import com.goldonbuy.goldonbackend.catalogContext.service.product.IProductServic
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ProductController {
 
     private final IProductService productService;
 
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProducts() {
         try {
@@ -33,6 +35,7 @@ public class ProductController {
         }
     }
 
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/product/{productId}/product")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         try {
@@ -44,6 +47,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
@@ -57,6 +61,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/product/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody UpdateProductRequest request, @PathVariable Long productId) {
         try {
@@ -68,6 +73,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
@@ -77,6 +83,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
 
     @GetMapping("/{category}/products")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
@@ -92,6 +99,7 @@ public class ProductController {
         }
     }
 
+
     @GetMapping("/products/{brand}/products")
     public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brand) {
         try {
@@ -105,6 +113,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
 
     @GetMapping("/products/by/category-and-brand")
     public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@RequestParam String category, @RequestParam String brand) {
@@ -120,6 +129,7 @@ public class ProductController {
         }
     }
 
+
     @GetMapping("/products/{name}/products")
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
         try {
@@ -133,6 +143,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
 
     @GetMapping("/products/by/brand-and-name")
     public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
@@ -148,6 +159,7 @@ public class ProductController {
         }
     }
 
+
     @GetMapping("/products/{store}/products")
     public ResponseEntity<ApiResponse> getProductsByStore(@PathVariable String store) {
         try {
@@ -162,6 +174,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/products/by-brand/and-name")
     public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
         try {
