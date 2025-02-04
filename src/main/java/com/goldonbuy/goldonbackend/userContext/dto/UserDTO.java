@@ -15,6 +15,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private Collection<Role> roles;
     private Store store;
     private List<OrderDTO> orders;

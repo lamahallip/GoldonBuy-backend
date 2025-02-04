@@ -3,7 +3,7 @@ spring:
     name: Goldon-backend
 
   datasource:
-    url: jdbc:mysql://${MYSQL_URL}:${MYSQL_PORT}/${MYSQL_DB}
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,6 +23,19 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
 #_______________________________________________________________________________________________________________________________________
 
 server:
@@ -40,4 +53,8 @@ auth:
 api:
   prefix: /api/v1
   prefix-2: /api/v2
+
+#________________________________________________________________________________________________________________________________________
+
+
 

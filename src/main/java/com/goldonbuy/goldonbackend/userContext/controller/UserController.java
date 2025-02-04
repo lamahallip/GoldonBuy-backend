@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RequestMapping("${api.prefix}/users")
 public class UserController {
 
@@ -21,13 +22,13 @@ public class UserController {
 
 //////////////////////////////////////////////////////////////// For test
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
     public ResponseEntity<String> helloAdmin() {
         return ResponseEntity.ok("Hello admin");
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user")
     public ResponseEntity<String> helloUser() {
         return ResponseEntity.ok("Hello user");
@@ -35,7 +36,7 @@ public class UserController {
 
 //////////////////////////////////////////////////////////////////////////
 
-    @GetMapping("/{userId}/user")
+//    @GetMapping("/{userId}/id/user")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         try {
             User user = this.userService.getUserById(userId);
@@ -43,6 +44,17 @@ public class UserController {
             return ResponseEntity.ok(new ApiResponse("Success !", userDTO));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/{email}/user")
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+        try {
+            User user = this.userService.getUserByEmail(email);
+            UserDTO userDTO = this.userService.convertToDTO(user);
+            return ResponseEntity.ok(userDTO);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -67,5 +79,14 @@ public class UserController {
         }
     }
 
+    @PostMapping("/{email}/{storeName}/to-become-admin")
+    public ResponseEntity<?> userToBecomeAdmin(@PathVariable String email, @PathVariable String storeName) {
+        try {
+            this.userService.userToBecomeAdmin(email, storeName);
+            return ResponseEntity.ok("User is now administrator");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
 }

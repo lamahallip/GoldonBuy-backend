@@ -3,28 +3,24 @@ package com.goldonbuy.goldonbackend.userContext.entity;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Cart;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Order;
 import com.goldonbuy.goldonbackend.catalogContext.entity.Store;
+import com.goldonbuy.goldonbackend.sharedKernel.domain.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class User {
+public class User extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

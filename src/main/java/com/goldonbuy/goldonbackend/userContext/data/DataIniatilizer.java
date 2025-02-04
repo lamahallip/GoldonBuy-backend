@@ -28,17 +28,32 @@ public class DataIniatilizer implements ApplicationListener<ApplicationReadyEven
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         Set<String> defaultRoles = Set.of("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER");
-        createDefaultUserIfNotExists();
-        createDefaultAdminIfNotExists();
+//        createSuperAdminIfNotExists();
+//        createDefaultUserIfNotExists();
+//        createDefaultAdminIfNotExists();
         createDefaultRoleIfNotExists(defaultRoles);
 
+    }
+
+    private void createSuperAdminIfNotExists() {
+
+        Role userAdminRole = this.roleRepository.findByName("ROLE_SUPER_ADMIN");
+        String email = "alliplamah@gmail.com";
+
+        User superAdmin = new User();
+        superAdmin.setEmail(email);
+        superAdmin.setFirstName("Allip");
+        superAdmin.setLastName("Lamah");
+        superAdmin.setRoles(Set.of(userAdminRole));
+        superAdmin.setPassword(this.passwordEncoder.encode(""));
+        userRepository.save(superAdmin);
     }
 
     private void createDefaultUserIfNotExists() {
 
         Role userRole = this.roleRepository.findByName("ROLE_USER");
 
-        for(int i=1; i<=5; i++) {
+        for(int i=1; i<=2; i++) {
             String defaultEmail = "user"+i+"@email.com";
             if(userRepository.existsByEmail(defaultEmail)) {
                 continue;

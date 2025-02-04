@@ -18,6 +18,19 @@ services:
     networks:
       - mysql
 
+# Email server config
+  mail:
+    image: bytemark/smtp:latest
+    container_name: SMTP_container
+    restart: always
+    environment:
+      RELAY_HOST: localhost
+      RELAY_PORT: 587
+      RELAY_USERNAME: service@goldon.com
+      RELAY_PASSWORD: Leseulallip@1999-
+    ports:
+      - '587:587'
+
 volumes:
   mysql:
 
